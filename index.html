@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Callbacks Practice | 1</title>
+</head>
+
+<body>
+	<p id="timer_tx"></p>
+	<p id="timer_ca"></p>
+	<script>
+		
+		//	Part 1:
+		//	The following code works. Your job is to understand it.
+		//	Trace the code, starting with the call to timeFunction
+		//	at the bottom, all the way through to the final call to
+		//	displayResults. Write out the code path on paper.
+		//	Part 2:
+		//	The URL
+		//		https://fonts.googleapis.com/css?family=Lora
+		//	is located in california.
+		//	
+        /*
+          time function is called --> passes in the function getDataFromTexas -->sets the start time to current time -->runs the function that was passed in "getDataFromTexas"--> texas passes the url to do xhr and also passes the anonymous function --> xhr gets the response and initiates the desplayResults which then  compares the start time and end time
+        
+        */
+		//	Write a function, getDataFromCalifornia, which times the
+		//	request to that URL. Put that time in the div #timer_ca above.
+			
+		function timeFunction(functionToTime) {
+			var startTime = Date.now();
+			functionToTime(function () {
+				displayResults(startTime, document.getElementById("timer_tx"));
+			});
+		}
+        function timeFunction2(functionToTime) {
+            var startTime = Date.now();
+            functionToTime(function () {
+                displayResults(startTime, document.getElementById("timer_ca"));
+            });
+        }
+		function getDataFromTexas(callback) {
+			var url = "https://code.jquery.com/jquery-2.2.0.min.js";
+			doXHR(url, callback);
+		}
+        function getDataFromCalifornia(callback){
+            var url = "https://fonts.googleapis.com/css?family=Lora";
+            doXHR(url, callback);
+        }
+		function doXHR(url, callback) {
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState == 4 &&
+					xhr.status == 200) {
+					callback(xhr.response);
+				}
+			}
+			xhr.open("GET", url, true);
+			xhr.send();
+		}
+		function displayResults(startTime, element) {
+			var endTime = Date.now();
+			var pre = "It took ";
+			var post = "ms to get the data!";
+			element.innerHTML = pre + (endTime - startTime) + post;
+		}
+		timeFunction(getDataFromTexas);
+        timeFunction2(getDataFromCalifornia);
+	</script>
+</body>
+
+</html>
